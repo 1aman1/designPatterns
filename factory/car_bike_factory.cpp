@@ -79,5 +79,8 @@ int main()
     creator_t *ptr_creator_2 = new specific_creator_2();
     customer_code(*ptr_creator_2);
 
+    delete ptr_creator_1;
+    delete ptr_creator_2;
+
     return 0;
 }

@@ -105,12 +105,17 @@ int main()
     creator_t *ptr_creator_2 = new specific_creator_2();
     customer_code(*ptr_creator_2);
 
+    delete ptr_creator_1;
+    delete ptr_creator_2;
+
     /* new EV code */
 
     std::cout << "\nptr_creator_3";
     creator_t *ptr_creator_3 = new specific_creator_3();
     customer_code(*ptr_creator_3);
 
+    delete ptr_creator_3;
+    
     /**/
 
     return 0;
