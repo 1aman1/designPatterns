@@ -91,6 +91,8 @@ public:
     }
 };
 
+//
+
 int main()
 {
     Creator *pCreatorWindows = new CreatorWindows();
@@ -99,6 +101,7 @@ int main()
     // new code for Macintosh
     Creator *pCreatorMacintosh = new CreatorMacintosh();
     Client_Codebase(*pCreatorMacintosh);
+    //
 
     std::cout << spaces(0);
 
