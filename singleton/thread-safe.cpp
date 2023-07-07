@@ -6,50 +6,44 @@ using namespace std;
 
 class Singleton
 {
+    std::string myString;
 
-protected:
-    Singleton(const std::string value) : value_(value)
-    {
-    }
+    Singleton(const std::string value) : myString(value) {}
 
-    static Singleton *singleton_;
-
-    static std::mutex mutex_;
-
-    std::string value_;
+    static Singleton *instance;
+    static std::mutex mutex;
 
 public:
-    Singleton(Singleton &other) = delete;
+    Singleton(const Singleton &cc) = delete;
+    Singleton &operator=(const Singleton &) = delete;
 
-    void operator=(const Singleton &) = delete;
+    Singleton(Singleton &&mc) = delete;
+    Singleton &operator=(Singleton &&) = delete;
+
+    void SomeBusinessLogic()
+    { /*....*/
+    }
 
     static Singleton *GetInstance(const std::string &value);
 
-    void SomeBusinessLogic()
-    {
-        // ...
-    }
-
-    std::string value() const
-    {
-        return value_;
-    }
+    std::string getMessage() const { return myString; }
 };
 
-Singleton *Singleton::singleton_ = nullptr;
-std::mutex Singleton::mutex_;
+Singleton *Singleton::instance = nullptr;
+std::mutex Singleton::mutex;
 
-/**
- * Static methods should be defined outside the class.
- */
 Singleton *Singleton::GetInstance(const std::string &value)
 {
-    std::lock_guard<std::mutex> lock(mutex_);
-    if (singleton_ == nullptr)
+    if (instance == nullptr)
     {
-        singleton_ = new Singleton(value);
+        std::lock_guard<std::mutex> lock(mutex);
+        if (instance == nullptr)
+        {
+            instance = new Singleton(value);
+        }
     }
-    return singleton_;
+
+    return instance;
 }
 
 void ThreadFoo()
@@ -57,7 +51,7 @@ void ThreadFoo()
     // Following code emulates slow initialization.
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     Singleton *singleton = Singleton::GetInstance("FOO");
-    std::cout << singleton->value() << "\n";
+    std::cout << singleton->getMessage() << "\n";
 }
 
 void ThreadBar()
@@ -65,7 +59,7 @@ void ThreadBar()
     // Following code emulates slow initialization.
     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     Singleton *singleton = Singleton::GetInstance("BAR");
-    std::cout << singleton->value() << "\n";
+    std::cout << singleton->getMessage() << "\n";
 }
 
 int main()
@@ -73,6 +67,7 @@ int main()
     std::cout << "If you see the same value, then singleton was reused (yay!\n"
               << "If you see different values, then 2 singletons were created (booo!!)\n\n"
               << "RESULT:\n";
+
     std::thread t1(ThreadFoo);
     std::thread t2(ThreadBar);
     t1.join();
