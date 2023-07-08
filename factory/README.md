@@ -1,0 +1,3 @@
+Object Creation with Complex Initialization: If object creation involves complex initialization logic or dependencies, a factory can encapsulate that logic and provide a simplified interface for creating objects. It allows the client code to focus on using the objects rather than dealing with their creation details.
+
+Dependency Injection: In scenarios where objects have dependencies that need to be resolved dynamically, a factory can be used to manage the creation and injection of dependencies. It provides a centralized mechanism to construct and wire the objects together.
