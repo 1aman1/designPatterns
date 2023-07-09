@@ -1,14 +1,14 @@
 #include <iostream>
 
 // target interface
-class MediaPlayer
+class IMediaPlayer
 {
 public:
     virtual void play(const std::string &songName) = 0;
 };
 
 // adaptee interface
-class AdvancedMediaPlayer
+class IAdvancedMediaPlayer
 {
 public:
     virtual void playAvi(const std::string &songName) = 0;
@@ -17,7 +17,7 @@ public:
 
 // adaptee  concrete
 // avi
-class AviPlayer : public AdvancedMediaPlayer
+class AviPlayer : public IAdvancedMediaPlayer
 {
 public:
     void playAvi(const std::string &songName) override
@@ -31,7 +31,7 @@ public:
 };
 
 // mp4
-class Mp4Player : public AdvancedMediaPlayer
+class Mp4Player : public IAdvancedMediaPlayer
 {
 public:
     void playAvi(const std::string &songName) override
@@ -46,9 +46,9 @@ public:
 };
 
 // adapter class
-class MediaPlayerAdapter : public MediaPlayer
+class MediaPlayerAdapter : public IMediaPlayer
 {
-    AdvancedMediaPlayer *advancedPlayer_ = nullptr;
+    IAdvancedMediaPlayer *advancedPlayer_ = nullptr;
 
 public:
     MediaPlayerAdapter(const std::string &fileFormat)
@@ -86,7 +86,7 @@ public:
 
 int main()
 {
-    MediaPlayer *player = new MediaPlayerAdapter("mp4");
+    IMediaPlayer *player = new MediaPlayerAdapter("mp4");
     player->play("boulevard of broken dreams.mp4");
 
     delete player;
@@ -94,13 +94,13 @@ int main()
     return 0;
 }
 
-/* The MediaPlayer class represents the Target interface, which defines the play() method that the client code expects to use.
+/* The IMediaPlayer class represents the Target interface, which defines the play() method that the client code expects to use.
 
-The AdvancedMediaPlayer class represents the Adaptee interface, which defines methods for playing specific types of media files (MP4 and AVI in this case).
+The IAdvancedMediaPlayer class represents the Adaptee interface, which defines methods for playing specific types of media files (MP4 and AVI in this case).
 
-The Mp4Player and AviPlayer classes are concrete implementations of the AdvancedMediaPlayer interface.
+The Mp4Player and AviPlayer classes are concrete implementations of the IAdvancedMediaPlayer interface.
 
-The MediaPlayerAdapter class is the Adapter, which implements the MediaPlayer interface. It internally uses an instance of the AdvancedMediaPlayer interface (either Mp4Player or AviPlayer) to perform the appropriate operations based on the file type.
+The MediaPlayerAdapter class is the Adapter, which implements the IMediaPlayer interface. It internally uses an instance of the IAdvancedMediaPlayer interface (either Mp4Player or AviPlayer) to perform the appropriate operations based on the file type.
 
 In the main() function, there is basic usage of the Adapter pattern. The MediaPlayerAdapter is created with the file type "mp4", which internally uses the Mp4Player to play the MP4 file "movie.mp4".
  */
