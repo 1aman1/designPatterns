@@ -1,13 +1,13 @@
 #include <iostream>
 
-// target interface
+// target interface 
 class IMediaPlayer
 {
 public:
     virtual void play(const std::string &songName) = 0;
 };
 
-// adaptee interface
+// adaptee interface 
 class IAdvancedMediaPlayer
 {
 public:
@@ -26,7 +26,8 @@ public:
     }
 
     void playMp4(const std::string &songName) override
-    { // unsupported
+    {
+        // unsupported
     }
 };
 
@@ -94,9 +95,9 @@ int main()
     return 0;
 }
 
-/* The IMediaPlayer class represents the Target interface, which defines the play() method that the client code expects to use.
+/* The IMediaPlayer class represents the Target or desired interface, which defines the play() method that the client code needs to use.
 
-The IAdvancedMediaPlayer class represents the Adaptee interface, which defines methods for playing specific types of media files (MP4 and AVI in this case).
+The IAdvancedMediaPlayer class represents the Adaptee interface or legacy code, which defines methods for playing specific types of media files (MP4 and AVI in this case).
 
 The Mp4Player and AviPlayer classes are concrete implementations of the IAdvancedMediaPlayer interface.
 
