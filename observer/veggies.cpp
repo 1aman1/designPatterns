@@ -3,14 +3,14 @@
 #include <algorithm>
 
 // observer
-class Observer
+class Observer_I
 {
 public:
     virtual void update(const std::string &message) = 0;
 };
 
 // some subject
-class Subject
+class Subject_I
 {
 public:
     virtual void subscribe(Observer *anObserver) = 0;
@@ -19,31 +19,31 @@ public:
 };
 
 // solid observer
-class ConcreteObserver : public Observer
+class ConcreteObserver : public Observer_I
 {
     std::string observerName;
 
-public:
+ublic:
     ConcreteObserver(const std::string &anObserverName) : observerName(anObserverName) {}
 
     void update(const std::string &message)
     {
-        std::cout << "Observer " << observerName << " received update: " << message << std::endl;
+        std::cout << observerName << " received update: " << message << std::endl;
     }
 };
 
 // solid subject
-class ConcreteSubject : public Subject
+class ConcreteSubject : public Subject_I
 {
-    std::vector<Observer *> listOfObservers;
+    std::vector<Observer_I *> listOfObservers;
 
 public:
-    void subscribe(Observer *anObserver) override
+    void subscribe(Observer_I *anObserver) override
     {
         listOfObservers.push_back(anObserver);
     }
 
-    void unSubscribe(Observer *anObserver) override
+    void unSubscribe(Observer_I *anObserver) override
     {
         listOfObservers.erase(std::remove(listOfObservers.begin(), listOfObservers.end(), anObserver), listOfObservers.end());
     }
