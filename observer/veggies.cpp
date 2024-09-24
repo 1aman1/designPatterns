@@ -13,8 +13,8 @@ public:
 class Subject_I
 {
 public:
-    virtual void subscribe(Observer *anObserver) = 0;
-    virtual void unSubscribe(Observer *anObserver) = 0;
+    virtual void subscribe(Observer_I *anObserver) = 0;
+    virtual void unSubscribe(Observer_I *anObserver) = 0;
     virtual void notify(const std::string &message) = 0;
 };
 
@@ -23,7 +23,7 @@ class ConcreteObserver : public Observer_I
 {
     std::string observerName;
 
-ublic:
+public:
     ConcreteObserver(const std::string &anObserverName) : observerName(anObserverName) {}
 
     void update(const std::string &message)
