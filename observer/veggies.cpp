@@ -3,7 +3,7 @@
 #include <algorithm>
 
 // observer
-class Observer_I
+class IObserver
 {
 public:
     virtual void update(const std::string &message) = 0;
@@ -11,16 +11,16 @@ public:
 };
 
 // some subject
-class Subject_I
+class ISubject
 {
 public:
-    virtual void subscribe(Observer_I *anObserver) = 0;
-    virtual void unSubscribe(Observer_I *anObserver) = 0;
+    virtual void subscribe(IObserver *anObserver) = 0;
+    virtual void unSubscribe(IObserver *anObserver) = 0;
     virtual void notify(const std::string &message) = 0;
 };
 
 // solid observer
-class ConcreteObserver : public Observer_I
+class ConcreteObserver : public IObserver
 {
     std::string observerName;
 
@@ -29,28 +29,23 @@ public:
 
     void update(const std::string &message) override
     {
-        std::cout << observerName << " received update: " << message << std::endl;
-    }
-
-    std::string getObserverName() const override
-    {
-        return observerName;
+        std::cout << "IObserver " << observerName << " received update: " << message << std::endl;
     }
 };
 
 // solid subject
-class ConcreteSubject : public Subject_I
+class ConcreteSubject : public ISubject
 {
-    std::vector<Observer_I *> listOfObservers;
+    std::vector<IObserver *> listOfObservers;
 
 public:
-    void subscribe(Observer_I *anObserver) override
+    void subscribe(IObserver *anObserver) override
     {
         listOfObservers.push_back(anObserver);
 	std::cout << anObserver->getObserverName() << " subscribed\n";
     }
 
-    void unSubscribe(Observer_I *anObserver) override
+    void unSubscribe(IObserver *anObserver) override
     {
         listOfObservers.erase(std::remove(listOfObservers.begin(), listOfObservers.end(), anObserver), listOfObservers.end());
         std::cout << anObserver->getObserverName() << " unsubscribed\n";	
