@@ -10,7 +10,7 @@ public:
 };
 
 // Abstract Factory
-class Factory
+class IFactory
 {
 public:
     virtual IProduct *createProduct() = 0;
@@ -38,7 +38,7 @@ public:
 };
 
 // Concrete Factories
-class ConcreteFactoryA : public Factory
+class ConcreteFactoryA : public IFactory
 {
 public:
     IProduct *createProduct() override
@@ -47,7 +47,7 @@ public:
     }
 };
 
-class ConcreteFactoryB : public Factory
+class ConcreteFactoryB : public IFactory
 {
 public:
     IProduct *createProduct() override
@@ -59,7 +59,7 @@ public:
 int main()
 {
     // Create a factory object
-    Factory *factory = new ConcreteFactoryA();
+    IFactory *factory = new ConcreteFactoryA();
 
     // Use the factory to create a product
     IProduct *product = factory->createProduct();
@@ -72,7 +72,7 @@ int main()
     delete product;
 
     // New factory
-    // Factory *factoryNew = new ConcreteFactoryB();
+    // IFactory *factoryNew = new ConcreteFactoryB();
     // IProduct *productNew = factoryNew->createProduct();
     // productNew->use();
 
@@ -110,7 +110,7 @@ public:
     }
 };
 
-class ConcreteFactoryN : public Factory
+class ConcreteFactoryN : public IFactory
 {
 public:
     IProduct *createProduct() override
@@ -119,7 +119,7 @@ public:
     }
 };
 
-Factory *factory = new ConcreteFactoryN();
+IFactory *factory = new ConcreteFactoryN();
 '''
 
 */
