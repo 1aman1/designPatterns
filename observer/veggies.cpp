@@ -7,6 +7,7 @@ class IObserver
 {
 public:
     virtual void update(const std::string &message) = 0;
+    virtual std::string getObserverName() const = 0; 
 };
 
 // some subject
@@ -26,7 +27,7 @@ class ConcreteObserver : public IObserver
 public:
     ConcreteObserver(const std::string &anObserverName) : observerName(anObserverName) {}
 
-    void update(const std::string &message)
+    void update(const std::string &message) override
     {
         std::cout << "IObserver " << observerName << " received update: " << message << std::endl;
     }
@@ -41,11 +42,13 @@ public:
     void subscribe(IObserver *anObserver) override
     {
         listOfObservers.push_back(anObserver);
+	std::cout << anObserver->getObserverName() << " subscribed\n";
     }
 
     void unSubscribe(IObserver *anObserver) override
     {
         listOfObservers.erase(std::remove(listOfObservers.begin(), listOfObservers.end(), anObserver), listOfObservers.end());
+        std::cout << anObserver->getObserverName() << " unsubscribed\n";	
     }
 
     void notify(const std::string &message) override
