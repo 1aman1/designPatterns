@@ -18,35 +18,24 @@ template <typename T, typename U>
 class Iterator
 {
 public:
-  typedef typename std::vector<T>::iterator iter_type;
-  Iterator(U *p_data, bool reverse = false) : m_p_data_(p_data)
+  using iterType = typename std::vector<T>::iterator;
+
+  Iterator(U *p_data) : m_p_data(p_data)
   {
-    m_it_ = m_p_data_->m_data_.begin();
+    First();
   }
 
-  void First()
-  {
-    m_it_ = m_p_data_->m_data_.begin();
-  }
+  void First() { m_iter = m_p_data->m_data_.begin(); }
 
-  void Next()
-  {
-    m_it_++;
-  }
+  void Next() { ++m_iter; }
 
-  bool IsDone()
-  {
-    return (m_it_ == m_p_data_->m_data_.end());
-  }
+  bool isDone() { return m_iter == m_p_data->m_data_.end(); }
 
-  iter_type Current()
-  {
-    return m_it_;
-  }
+  iterType Current() { return m_iter; }
 
 private:
-  U *m_p_data_;
-  iter_type m_it_;
+  U *m_p_data;
+  iterType m_iter;
 };
 
 /**
@@ -60,10 +49,7 @@ class Container
   friend class Iterator<T, Container>;
 
 public:
-  void Add(T a)
-  {
-    m_data_.push_back(a);
-  }
+  void Add(T a) { m_data_.push_back(a); }
 
   Iterator<T, Container> *CreateIterator()
   {
@@ -79,15 +65,9 @@ class Data
 public:
   Data(int a = 0) : m_data_(a) {}
 
-  void set_data(int a)
-  {
-    m_data_ = a;
-  }
+  void set_data(int a) { m_data_ = a; }
 
-  int data()
-  {
-    return m_data_;
-  }
+  int data() { return m_data_; }
 
 private:
   int m_data_;
@@ -95,7 +75,7 @@ private:
 
 /**
  * The client code may or may not know about the Concrete Iterator or Collection
- * classes, for this implementation the container is generic so you can used
+ * classes, for this implementation the container is generic so you can use
  * with an int or with a custom class.
  */
 void ClientCode()
@@ -109,7 +89,7 @@ void ClientCode()
   }
 
   Iterator<int, Container<int>> *it = cont.CreateIterator();
-  for (it->First(); !it->IsDone(); it->Next())
+  for (it->First(); !it->isDone(); it->Next())
   {
     std::cout << *it->Current() << std::endl;
   }
@@ -122,10 +102,11 @@ void ClientCode()
 
   std::cout << "________________Iterator with custom Class______________________________" << std::endl;
   Iterator<Data, Container<Data>> *it2 = cont2.CreateIterator();
-  for (it2->First(); !it2->IsDone(); it2->Next())
+  for (it2->First(); !it2->isDone(); it2->Next())
   {
     std::cout << it2->Current()->data() << std::endl;
   }
+
   delete it;
   delete it2;
 }
