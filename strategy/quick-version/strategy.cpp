@@ -1,65 +1,64 @@
 #include <iostream>
 
 // strategy contract
-
 class IStrategy
 {
 public:
-    virtual void sort() = 0;
+  virtual void sort() = 0;
 };
 
 // concrete strategies
 class BubbleSort : public IStrategy
 {
 public:
-    void sort() override
-    {
-        std::cout << "BubbleSort\n";
-    }
+  void sort() override
+  {
+    std::cout << "BubbleSort\n";
+  }
 };
 
 class MergeSort : public IStrategy
 {
 public:
-    void sort() override
-    {
-        std::cout << "MergeSort\n";
-    }
+  void sort() override
+  {
+    std::cout << "MergeSort\n";
+  }
 };
 
 // context / user
 class Sorter
 {
-    IStrategy *strategy;
+  IStrategy *strategy;
 
 public:
-    void setStrategy(IStrategy *aStrategy)
-    {
-        this->strategy = aStrategy;
-    }
+  void setStrategy(IStrategy *aStrategy)
+  {
+    this->strategy = aStrategy;
+  }
 
-    void sort()
-    {
-        strategy->sort();
-    }
+  void sort()
+  {
+    strategy->sort();
+  }
 };
 
 int main()
 {
-    Sorter sortingHandle;
+  Sorter sortingHandle;
 
-    MergeSort *mSort = new MergeSort();
-    sortingHandle.setStrategy(mSort);
-    sortingHandle.sort();
+  MergeSort *mSort = new MergeSort();
+  sortingHandle.setStrategy(mSort);
+  sortingHandle.sort();
 
-    BubbleSort *bSort = new BubbleSort();
-    sortingHandle.setStrategy(bSort);
-    sortingHandle.sort();
+  BubbleSort *bSort = new BubbleSort();
+  sortingHandle.setStrategy(bSort);
+  sortingHandle.sort();
 
-    delete mSort;
-    delete bSort;
+  delete mSort;
+  delete bSort;
 
-    return 0;
+  return 0;
 }
 
 /*
