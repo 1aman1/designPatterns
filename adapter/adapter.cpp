@@ -1,107 +1,80 @@
 #include <iostream>
+#include <string>
+#include <algorithm>
 
-// target interface 
-class IMediaPlayer
+/**
+ * The Target defines the domain-specific interface used by the client code.
+ */
+class Target
 {
 public:
-    virtual void play(const std::string &songName) = 0;
-};
+    virtual ~Target() = default;
 
-// adaptee interface 
-class IAdvancedMediaPlayer
-{
-public:
-    virtual void playAvi(const std::string &songName) = 0;
-    virtual void playMp4(const std::string &songName) = 0;
-};
-
-// adaptee  concrete
-// avi
-class AviPlayer : public IAdvancedMediaPlayer
-{
-public:
-    void playAvi(const std::string &songName) override
+    virtual std::string Request() const
     {
-        std::cout << "Playing AVI file: " << songName << std::endl;
-    }
-
-    void playMp4(const std::string &songName) override
-    {
-        // unsupported
+        return "Target: The default target's behavior.";
     }
 };
 
-// mp4
-class Mp4Player : public IAdvancedMediaPlayer
+/**
+ * The Adaptee contains some useful behavior, but its interface is incompatible
+ * with the existing client code. The Adaptee needs some adaptation before the
+ * client code can use it.
+ */
+class Adaptee
 {
 public:
-    void playAvi(const std::string &songName) override
+    std::string SpecificRequest() const
     {
-        // unsupported
-    }
-
-    void playMp4(const std::string &songName) override
-    {
-        std::cout << "Playing MP4 file: " << songName << std::endl;
+        return ".eetpadA eht fo roivaheb laicepS";
     }
 };
 
-// adapter class
-class MediaPlayerAdapter : public IMediaPlayer
+/**
+ * The Adapter makes the Adaptee's interface compatible with the Target's
+ * interface.
+ */
+class Adapter : public Target
 {
-    IAdvancedMediaPlayer *advancedPlayer_ = nullptr;
+private:
+    Adaptee *adaptee_;
 
 public:
-    MediaPlayerAdapter(const std::string &fileFormat)
+    Adapter(Adaptee *adaptee) : adaptee_(adaptee) {}
+    std::string Request() const override
     {
-        if (fileFormat == "mp4")
-        {
-            advancedPlayer_ = new Mp4Player();
-        }
-        else if (fileFormat == "avi")
-        {
-            advancedPlayer_ = new AviPlayer();
-        }
-        else
-        {
-            std::cout << "unsupported file format\n";
-            advancedPlayer_ = nullptr;
-        }
-    }
-
-    void play(const std::string &songName) override
-    {
-        if (advancedPlayer_ != nullptr)
-        {
-            if (songName.substr(songName.find_last_of(".") + 1) == "mp4")
-                advancedPlayer_->playMp4(songName);
-            else if (songName.substr(songName.find_last_of(".") + 1) == "avi")
-                advancedPlayer_->playAvi(songName);
-            else
-            {
-                std::cout << "unservable request\n";
-            }
-        }
+        std::string to_reverse = this->adaptee_->SpecificRequest();
+        std::reverse(to_reverse.begin(), to_reverse.end());
+        return "Adapter: (TRANSLATED) " + to_reverse;
     }
 };
+
+/**
+ * The client code supports all classes that follow the Target interface.
+ */
+void ClientCode(const Target *target)
+{
+    std::cout << target->Request();
+}
 
 int main()
 {
-    IMediaPlayer *player = new MediaPlayerAdapter("mp4");
-    player->play("boulevard of broken dreams.mp4");
+    std::cout << "Client: I can work just fine with the Target objects:\n";
+    Target *target = new Target;
+    ClientCode(target);
+    std::cout << "\n\n";
+    Adaptee *adaptee = new Adaptee;
+    std::cout << "Client: The Adaptee class has a weird interface. See, I don't understand it:\n";
+    std::cout << "Adaptee: " << adaptee->SpecificRequest();
+    std::cout << "\n\n";
+    std::cout << "Client: But I can work with it via the Adapter:\n";
+    Adapter *adapter = new Adapter(adaptee);
+    ClientCode(adapter);
+    std::cout << "\n";
 
-    delete player;
+    delete target;
+    delete adaptee;
+    delete adapter;
 
     return 0;
 }
-
-/* The IMediaPlayer class represents the Target or desired interface, which defines the play() method that the client code needs to use.
-
-The IAdvancedMediaPlayer class represents the Adaptee interface or legacy code, which defines methods for playing specific types of media files (MP4 and AVI in this case).
-
-The Mp4Player and AviPlayer classes are concrete implementations of the IAdvancedMediaPlayer interface.
-
-The MediaPlayerAdapter class is the Adapter, which implements the IMediaPlayer interface. It internally uses an instance of the IAdvancedMediaPlayer interface (either Mp4Player or AviPlayer) to perform the appropriate operations based on the file type.
-
-In the main() function, there is basic usage of the Adapter pattern. The MediaPlayerAdapter is created with the file type "mp4", which internally uses the Mp4Player to play the MP4 file "movie.mp4".
- */

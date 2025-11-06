@@ -13,7 +13,7 @@ void FestivePricing::calculatePrice(const std::string &product)
 
 void PaymentDesk::setStrategy(std::unique_ptr<PricingStrategy> aStrategy)
 {
-    this->priceStrategy = aStrategy;
+    this->priceStrategy = std::move(aStrategy);
 }
 
 void PaymentDesk::getPrice(const std::string &product)
