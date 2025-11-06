@@ -6,6 +6,11 @@ class Singleton
 private:
     Singleton() {};
     static Singleton *resource;
+    static std::once_flag initFlag;
+    static void init()
+    {
+        resource = new Singleton();
+    }
 
 public:
     Singleton(const Singleton &cc) = delete;
@@ -16,10 +21,7 @@ public:
 
     static Singleton *getInstance()
     {
-        if (not resource)
-        {
-            resource = new Singleton();
-        }
+        std::call_once(initFlag, init);
         return resource;
     }
 
@@ -30,6 +32,7 @@ public:
 };
 
 Singleton *Singleton::resource = nullptr;
+std::once_flag Singleton::initFlag;
 
 int main()
 {

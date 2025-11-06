@@ -1,12 +1,12 @@
-adapter
 factory
+builder
 iterator
 mediator
-singleton
-builder
+adapter
 
 DONE
 chain-of-responsibility
 decorator
 observer
 strategy
+singleton

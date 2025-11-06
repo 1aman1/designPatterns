@@ -6,6 +6,7 @@ class Singleton
 private:
     Singleton() {};
     static Singleton *resource;
+    static std::mutex mtx;
 
 public:
     Singleton(const Singleton &cc) = delete;
@@ -18,7 +19,11 @@ public:
     {
         if (not resource)
         {
-            resource = new Singleton();
+            std::lock_guard<std::mutex> lk(mtx);
+            if (not resource)
+            {
+                resource = new Singleton();
+            }
         }
         return resource;
     }
@@ -30,6 +35,7 @@ public:
 };
 
 Singleton *Singleton::resource = nullptr;
+std::mutex Singleton::mtx;
 
 int main()
 {
