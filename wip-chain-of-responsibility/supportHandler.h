@@ -1,11 +1,9 @@
-// guards
 #ifndef SUPPORTHANDLER_H
 #define SUPPORTHANDLER_H
 
 #include <memory>
-// #include<iostream>
+#include <iostream>
 
-// Request
 enum Priority
 {
     FREE,
@@ -56,9 +54,9 @@ class EliteSupportHandler : public SupportHandler
 {
 public:
     void handleRequest(std::unique_ptr<Request> request) override;
-    void setNext(std::unique_ptr<SupportHandler> next) override;
 
 private:
+    void setNext(std::unique_ptr<SupportHandler> next) override; // Chain ends here
     std::unique_ptr<SupportHandler> nextHandler;
 };
 

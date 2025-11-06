@@ -26,27 +26,6 @@ void FreeSupportHandler::handleRequest(std::unique_ptr<Request> request)
     }
 }
 
-void PaidSupportHandler::setNext(std::unique_ptr<SupportHandler> next)
-{
-    nextHandler = std::move(next);
-}
-
-void PaidSupportHandler::handleRequest(std::unique_ptr<Request> request)
-{
-    if (request->getPriority() == PAID)
-    {
-        std::cout << "Paid support handled the request.\n";
-    }
-    else if (nextHandler)
-    {
-        nextHandler->handleRequest(std::move(request));
-    }
-    else
-    {
-        std::cout << "Request doesn't exist OR invalid request type\n";
-    }
-}
-
 void PremiumSupportHandler::setNext(std::unique_ptr<SupportHandler> next)
 {
     nextHandler = std::move(next);
@@ -61,6 +40,27 @@ void PremiumSupportHandler::handleRequest(std::unique_ptr<Request> request)
     else if (nextHandler)
     {
         nextHandler->handleRequest(std::move(request));
+    }
+    else
+    {
+        std::cout << "Request doesn't exist OR invalid request type\n";
+    }
+}
+
+void EliteSupportHandler::setNext(std::unique_ptr<SupportHandler> next)
+{
+    // chain ends here
+}
+
+void EliteSupportHandler::handleRequest(std::unique_ptr<Request> request)
+{
+    if (request->getPriority() == ELITE)
+    {
+        std::cout << "Elite support handled the request.\n";
+    }
+    else if (nextHandler)
+    {
+        // nextHandler->handleRequest(std::move(request));
     }
     else
     {
