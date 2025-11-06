@@ -1,0 +1,12 @@
+adapter
+factory
+iterator
+mediator
+singleton
+builder
+
+DONE
+chain-of-responsibility
+decorator
+observer
+strategy
