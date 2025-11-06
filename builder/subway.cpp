@@ -2,7 +2,7 @@
 #include <string>
 
 // Product
-class Subway
+class SubwaySandwich
 {
 public:
     void setBread(const std::string &bread) { bread_ = bread; }
@@ -11,7 +11,7 @@ public:
 
     void showSub() const
     {
-        std::cout << "Subway with Bread: " << bread_
+        std::cout << "SubwaySandwich with Bread: " << bread_
                   << ", Sauce: " << sauce_
                   << ", Filling: " << filling_
                   << std::endl;
@@ -31,23 +31,23 @@ public:
     virtual void breadMaker() = 0;
     virtual void sauceMaker() = 0;
     virtual void fillingMaker() = 0;
-    virtual Subway *getMySub() = 0;
+    virtual SubwaySandwich *getMySub() = 0;
 };
 
 // Concrete Builder
 class VeggieDeliteSubwayMaker : public SubwayMaker
 {
 public:
-    VeggieDeliteSubwayMaker() { sub = new Subway(); }
+    VeggieDeliteSubwayMaker() { sub = new SubwaySandwich(); }
 
     void breadMaker() override { sub->setBread("Honey Oat Parmesan"); }
     void sauceMaker() override { sub->setSauce("Mayo & Mint Sauce"); }
     void fillingMaker() override { sub->setFilling("Lettuce, Cucumber, Onion, Corn"); }
 
-    Subway *getMySub() override { return sub; }
+    SubwaySandwich *getMySub() override { return sub; }
 
 private:
-    Subway *sub;
+    SubwaySandwich *sub;
 };
 
 // Director
@@ -69,7 +69,7 @@ int main()
 
     supervisor.makeSubway(vegDeliteMaker);
 
-    Subway *vegDelite = vegDeliteMaker->getMySub();
+    SubwaySandwich *vegDelite = vegDeliteMaker->getMySub();
     vegDelite->showSub();
 
     delete vegDeliteMaker;
