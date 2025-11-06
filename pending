@@ -1,8 +1,7 @@
-factory
-builder
-iterator
-mediator
+command
+
 adapter
+iterator
 
 DONE
 chain-of-responsibility
@@ -10,3 +9,5 @@ decorator
 observer
 strategy
 singleton
+factory
+builder

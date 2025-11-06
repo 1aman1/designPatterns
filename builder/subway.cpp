@@ -5,26 +5,15 @@
 class Subway
 {
 public:
-    void setBread(const std::string &bread)
-    {
-        bread_ = bread;
-    }
-
-    void setSauce(const std::string &sauce)
-    {
-        sauce_ = sauce;
-    }
-
-    void setFilling(const std::string &filling)
-    {
-        filling_ = filling;
-    }
+    void setBread(const std::string &bread) { bread_ = bread; }
+    void setSauce(const std::string &sauce) { sauce_ = sauce; }
+    void setFilling(const std::string &filling) { filling_ = filling; }
 
     void showSub() const
     {
-        std::cout << "Subway with Dough: " << bread_
+        std::cout << "Subway with Bread: " << bread_
                   << ", Sauce: " << sauce_
-                  << ", Topping: " << filling_
+                  << ", Filling: " << filling_
                   << std::endl;
     }
 
@@ -35,66 +24,56 @@ private:
 };
 
 // Builder
-class SubwayBuilder
+class SubwayMaker
 {
 public:
-    virtual void buildBread() = 0;
-    virtual void buildSauce() = 0;
-    virtual void buildFilling() = 0;
+    virtual ~SubwayMaker() {}
+    virtual void breadMaker() = 0;
+    virtual void sauceMaker() = 0;
+    virtual void fillingMaker() = 0;
     virtual Subway *getMySub() = 0;
 };
 
-// Concrete Builder 1
-class VeggieDeliteSubwayBuilder : public SubwayBuilder
+// Concrete Builder
+class VeggieDeliteSubwayMaker : public SubwayMaker
 {
 public:
-    void buildBread() override
-    {
-        sub_->setBread("Honey Roast parmesan");
-    }
+    VeggieDeliteSubwayMaker() { sub = new Subway(); }
 
-    void buildSauce() override
-    {
-        sub_->setSauce("Mayo sauce / Mint sauce");
-    }
+    void breadMaker() override { sub->setBread("Honey Oat Parmesan"); }
+    void sauceMaker() override { sub->setSauce("Mayo & Mint Sauce"); }
+    void fillingMaker() override { sub->setFilling("Lettuce, Cucumber, Onion, Corn"); }
 
-    void buildFilling() override
-    {
-        sub_->setFilling("Lettuce, cucumber, onion, corn");
-    }
-
-    Subway *getMySub() override
-    {
-        return sub_;
-    }
+    Subway *getMySub() override { return sub; }
 
 private:
-    Subway *sub_ = new Subway();
+    Subway *sub;
 };
 
 // Director
-class PizzaDirector
+class SubwaySupervisor
 {
 public:
-    void makePizza(SubwayBuilder *builder)
+    void makeSubway(SubwayMaker *maker)
     {
-        builder->buildBread();
-        builder->buildSauce();
-        builder->buildFilling();
+        maker->breadMaker();
+        maker->sauceMaker();
+        maker->fillingMaker();
     }
 };
 
 int main()
 {
-    PizzaDirector director;
+    SubwaySupervisor supervisor;
+    SubwayMaker *vegDeliteMaker = new VeggieDeliteSubwayMaker();
 
-    SubwayBuilder *veggieDelightBuilder = new VeggieDeliteSubwayBuilder();
-    director.makePizza(veggieDelightBuilder);
-    Subway *veggieDelightSubway = veggieDelightBuilder->getMySub();
-    veggieDelightSubway->showSub();
+    supervisor.makeSubway(vegDeliteMaker);
 
-    delete veggieDelightBuilder;
-    delete veggieDelightSubway;
+    Subway *vegDelite = vegDeliteMaker->getMySub();
+    vegDelite->showSub();
+
+    delete vegDeliteMaker;
+    delete vegDelite;
 
     return 0;
 }
