@@ -11,3 +11,4 @@ strategy
 singleton
 factory
 builder
+proxy
